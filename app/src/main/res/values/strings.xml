@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Pokemon</string>
+
+    <string name="title_search">Search</string>
+    <string name="title_random">Random</string>
+    <string name="title_fav">Fav</string>
+
+</resources>

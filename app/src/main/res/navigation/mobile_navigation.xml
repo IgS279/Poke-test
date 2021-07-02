@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_search">
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.igs279.pokemon.ui.search.SearchFragment"
+        android:label="@string/title_search"
+        tools:layout="@layout/fragment_search" />
+
+    <fragment
+        android:id="@+id/navigation_random"
+        android:name="com.igs279.pokemon.ui.random.RandomFragment"
+        android:label="@string/title_random"
+        tools:layout="@layout/fragment_random" />
+
+    <fragment
+        android:id="@+id/navigation_fav"
+        android:name="com.igs279.pokemon.ui.fav.FavFragment"
+        android:label="@string/title_fav"
+        tools:layout="@layout/fragment_fav" />
+</navigation>

@@ -5,4 +5,13 @@
     <string name="title_random">Random</string>
     <string name="title_fav">Fav</string>
 
+    <string name="edit_text_search_hint">Введите имя</string>
+    <string name="button_search">Поиск</string>
+
+    <string name="search_text_id">Id</string>
+    <string name="search_text_name">Name</string>
+    <string name="search_text_height">Height</string>
+    <string name="search_text_weight">Weight</string>
+    <string name="search_text_baseExperience">Experience</string>
+
 </resources>

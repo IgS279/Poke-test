@@ -2,6 +2,8 @@ package com.igs279.pokemon
 
 import android.app.Application
 import android.util.Log
+import com.igs279.pokemon.di.repoModule
+import com.igs279.pokemon.di.searchViewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -17,7 +19,10 @@ class App : Application() {
             androidLogger(Level.DEBUG)
             androidContext(this@App)
             modules(
-                listOf())
+                listOf(
+                        searchViewModelModule,
+                        repoModule)
+            )
         }
     }
 }

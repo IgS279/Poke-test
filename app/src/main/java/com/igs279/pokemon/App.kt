@@ -2,6 +2,7 @@ package com.igs279.pokemon
 
 import android.app.Application
 import android.util.Log
+import com.igs279.pokemon.di.randomViewModelModule
 import com.igs279.pokemon.di.repoModule
 import com.igs279.pokemon.di.searchViewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -21,6 +22,7 @@ class App : Application() {
             modules(
                 listOf(
                         searchViewModelModule,
+                        randomViewModelModule,
                         repoModule)
             )
         }

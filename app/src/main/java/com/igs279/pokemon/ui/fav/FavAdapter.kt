@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.igs279.pokemon.TAG
 import com.igs279.pokemon.data.models.PokeEntityDb
 import com.igs279.pokemon.databinding.FavRecyclerItemBinding
+import com.squareup.picasso.Picasso
 
 class FavAdapter(private val pokeDbs: List<PokeEntityDb>,
                  private val listener: OnCustomClickListener)
@@ -32,7 +33,10 @@ class FavAdapter(private val pokeDbs: List<PokeEntityDb>,
         when(holder) {
             is ViewHolder -> {
                 holder.binding.favItemTextViewName.text = pokeDbs[position].pokeEntity.name
-                holder.binding.favItemTextViewId.text = pokeDbs[position].pokeEntity.id.toString()
+                holder.binding.favItemTextViewId.text = pokeDbs[position].pokeEntity.id
+                Picasso.get()
+                        .load(pokeDbs[position].pokeEntity.imageUrl)
+                        .into(holder.binding.favItemImagePoke)
                 holder.binding.recyclerImageViewFavPoke.setOnClickListener {
                     Log.i(TAG, "pokeEntityDb = $pokeDbs")
                     listener.onItemClick(it, pokeDbs[position])

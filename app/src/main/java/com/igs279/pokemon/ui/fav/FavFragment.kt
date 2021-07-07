@@ -4,20 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.igs279.pokemon.R
 import com.igs279.pokemon.data.models.PokeEntityDb
 import com.igs279.pokemon.databinding.FragmentFavBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavFragment : Fragment(), OnCustomClickListener {
@@ -26,8 +20,6 @@ class FavFragment : Fragment(), OnCustomClickListener {
     private lateinit var binding: FragmentFavBinding
     private lateinit var favAdapter: FavAdapter
     private lateinit var favRecycler: RecyclerView
-
-    //private lateinit var pokes: List<PokeEntity>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,8 +49,6 @@ class FavFragment : Fragment(), OnCustomClickListener {
     }
 
     override fun onItemClick(view: View, item: PokeEntityDb) {
-        CoroutineScope(Dispatchers.IO).launch {
             favViewModel.deletePoke(item)
-        }
     }
 }

@@ -2,11 +2,13 @@ package com.igs279.pokemon.ui.fav
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.igs279.pokemon.TAG
 import com.igs279.pokemon.data.Repository
 import com.igs279.pokemon.data.models.PokeEntityDb
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FavViewModel(private val repository: Repository) : ViewModel() {
 
@@ -15,8 +17,10 @@ class FavViewModel(private val repository: Repository) : ViewModel() {
         return repository.getLocalPokeData()
     }
 
-    suspend fun deletePoke(pokeEntityDb: PokeEntityDb){
-        repository.deletePoke(pokeEntityDb)
+    fun deletePoke(pokeEntityDb: PokeEntityDb){
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.deletePoke(pokeEntityDb)
+        }
     }
 
 }

@@ -1,7 +1,10 @@
 package com.igs279.pokemon.di
 
 
+import android.app.Application
 import com.igs279.pokemon.data.Repository
+import com.igs279.pokemon.data.local.AppDatabase
+import com.igs279.pokemon.data.local.PokeDAO
 import com.igs279.pokemon.data.remote.RemoteDataSource
 import com.igs279.pokemon.ui.random.RandomViewModel
 import com.igs279.pokemon.ui.search.SearchViewModel
@@ -30,5 +33,18 @@ val repoModule = module {
     single { provideRemoteDataSource() }
     single { provideRepository(get()) }
 
+}
+
+val databaseModule = module {
+    fun provideAppDatabase(application: Application): AppDatabase {
+        return AppDatabase.getDatabase(application)
+    }
+
+    fun provideMyWeatherDao(db: AppDatabase): PokeDAO {
+        return db.myPokeDAO()
+    }
+
+    single { provideAppDatabase(get()) }
+    single { provideMyWeatherDao(get()) }
 }
 

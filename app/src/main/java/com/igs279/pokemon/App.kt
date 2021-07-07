@@ -2,6 +2,7 @@ package com.igs279.pokemon
 
 import android.app.Application
 import android.util.Log
+import com.igs279.pokemon.di.databaseModule
 import com.igs279.pokemon.di.randomViewModelModule
 import com.igs279.pokemon.di.repoModule
 import com.igs279.pokemon.di.searchViewModelModule
@@ -21,9 +22,10 @@ class App : Application() {
             androidContext(this@App)
             modules(
                 listOf(
-                        searchViewModelModule,
-                        randomViewModelModule,
-                        repoModule)
+                    searchViewModelModule,
+                    randomViewModelModule,
+                    repoModule,
+                    databaseModule)
             )
         }
     }

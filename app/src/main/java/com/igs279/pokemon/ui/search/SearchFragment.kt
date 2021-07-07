@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.igs279.pokemon.R
@@ -47,5 +48,12 @@ class SearchFragment : Fragment() {
             binding.textBaseExperience.visibility = View.VISIBLE
             binding.imageViewFavPoke.visibility = View.VISIBLE
         }
+
+        searchViewModel.hasNetwork.observe(viewLifecycleOwner){ hasNetwork ->
+            if (!hasNetwork){
+                Toast.makeText(activity, "No internet connection", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
+
 }

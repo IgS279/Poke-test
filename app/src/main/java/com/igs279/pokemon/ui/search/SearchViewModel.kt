@@ -1,14 +1,16 @@
 package com.igs279.pokemon.ui.search
 
+import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.util.Log
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.igs279.pokemon.App
 import com.igs279.pokemon.TAG
 import com.igs279.pokemon.data.Repository
 import com.igs279.pokemon.data.models.PokeEntityDb
@@ -18,7 +20,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SearchViewModel(private val repository: Repository) : ViewModel() {
+class SearchViewModel(application: Application,
+                      private val repository: Repository)
+    : AndroidViewModel(application) {
+
+    private var _hasNetwork = MutableLiveData<Boolean>()
+    val hasNetwork: LiveData<Boolean>
+        get() = _hasNetwork
 
     private var _imageUrl = MutableLiveData<String>()
     val imageUrl: LiveData<String>
@@ -46,9 +54,12 @@ class SearchViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun onClickSearchButton(){
-        etText.get()?.let { if (it != "") searchPokeByName(it) else  searchPokeByName("0")}
-        favVisible.set(false)
-        Log.i(TAG, "favVisible.set(false) +")
+        if (checkNetwork()) {
+            etText.get()?.let { if (it != "") searchPokeByName(it) else searchPokeByName("0") }
+            favVisible.set(false)
+            _hasNetwork.value = true
+            Log.i(TAG, "favVisible.set(false) +")
+        } else _hasNetwork.value = false
     }
 
     fun onClickFavStars(){
@@ -97,6 +108,14 @@ class SearchViewModel(private val repository: Repository) : ViewModel() {
             favSelect.set(false)
             Log.i(TAG, "deletePoke")
         }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun checkNetwork(): Boolean {
+        val cm = getApplication<App>()
+                .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo: NetworkInfo? = cm.activeNetworkInfo
+        return networkInfo?.isConnectedOrConnecting == true
     }
 
 }

@@ -1,6 +1,9 @@
 package com.igs279.pokemon
 
 import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.util.Log
 import com.igs279.pokemon.di.*
 import org.koin.android.ext.koin.androidContext
@@ -28,3 +31,5 @@ class App : Application() {
         }
     }
 }
+
+

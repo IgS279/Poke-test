@@ -12,7 +12,6 @@ import com.igs279.pokemon.TAG
 import com.igs279.pokemon.databinding.FragmentSearchBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class SearchFragment : Fragment() {
 
     private val searchViewModel: SearchViewModel by viewModel()
@@ -27,10 +26,6 @@ class SearchFragment : Fragment() {
                 R.layout.fragment_search, container, false)
         binding.searchViewModel = searchViewModel
         binding.lifecycleOwner = this
-
-        binding.buttonSearch.setOnClickListener{
-            searchViewModel.searchPokeByName(binding.editTextSearch.text.toString())
-        }
         return binding.root
     }
 
@@ -38,29 +33,17 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.i(TAG, "SearchFragment onViewCreated +")
 
-        searchViewModel.id.observe(viewLifecycleOwner){ id ->
-            Log.i(TAG, "searchViewModel.id  id= $id")
-            binding.textViewId.text = id
+        searchViewModel.pokeEntity.observe(viewLifecycleOwner){ pokeEntity ->
+            binding.textViewId.text = pokeEntity.id
+            binding.textViewName.text = pokeEntity.name
+            binding.textViewHeight.text = pokeEntity.height
+            binding.textViewWeight.text = pokeEntity.weight
+            binding.textViewBaseExperience.text = pokeEntity.experience
+
             binding.textId.visibility = View.VISIBLE
-        }
-
-        searchViewModel.myName.observe(viewLifecycleOwner){ name ->
-            binding.textViewName.text = name
             binding.textName.visibility = View.VISIBLE
-        }
-
-        searchViewModel.height.observe(viewLifecycleOwner){ height ->
-            binding.textViewHeight.text = height
             binding.textHeight.visibility = View.VISIBLE
-        }
-
-        searchViewModel.weight.observe(viewLifecycleOwner){ weight ->
-            binding.textViewWeight.text = weight
             binding.textWeight.visibility = View.VISIBLE
-        }
-
-        searchViewModel.experience.observe(viewLifecycleOwner){ experience ->
-            binding.textViewBaseExperience.text = experience
             binding.textBaseExperience.visibility = View.VISIBLE
             binding.imageViewFavPoke.visibility = View.VISIBLE
         }

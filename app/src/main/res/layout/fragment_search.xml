@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
+
         <variable
             name="searchViewModel"
             type="com.igs279.pokemon.ui.search.SearchViewModel" />
@@ -22,10 +24,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
             android:hint="@string/edit_text_search_hint"
             android:inputType="text"
             android:maxLines="1"
             android:textSize="18sp"
+            android:text="@={searchViewModel.etText}"
             app:layout_constraintEnd_toStartOf="@+id/button_search"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,9 +39,11 @@
             android:id="@+id/button_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
             android:text="@string/button_search"
+            android:onClick="@{(view) -> searchViewModel.onClickSearchButton()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/edit_text_search"
@@ -50,7 +56,8 @@
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text_search">
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_search"
+            tools:ignore="ExtraText">
 
             <ImageView
                 android:id="@+id/image_view_search_poke"
@@ -61,11 +68,13 @@
 
             <ImageView
                 android:id="@+id/image_view_fav_poke"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="end|bottom"
-                android:src="@drawable/starbl"
-                android:visibility="invisible"/>
+                android:onClick="@{(view) -> searchViewModel.onClickFavStars()}"
+                android:src="@{searchViewModel.favSelect ? @drawable/star : @drawable/starbl}"
+                android:visibility="@{searchViewModel.favVisible ? View.VISIBLE : View.INVISIBLE}"
+                />
 
         </FrameLayout>
 

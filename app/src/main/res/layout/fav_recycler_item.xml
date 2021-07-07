@@ -87,8 +87,8 @@
 
         <ImageView
             android:id="@+id/recycler_image_view_fav_poke"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:src="@drawable/star"

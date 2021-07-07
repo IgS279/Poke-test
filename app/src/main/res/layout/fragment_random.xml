@@ -20,7 +20,8 @@
             android:id="@+id/button_random"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:text="@string/button_random"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,8 +46,8 @@
 
             <ImageView
                 android:id="@+id/image_view_random_fav_poke"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="end|bottom"
                 android:src="@drawable/starbl"
                 android:visibility="invisible"/>

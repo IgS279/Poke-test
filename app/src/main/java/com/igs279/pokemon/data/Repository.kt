@@ -10,16 +10,17 @@ import com.igs279.pokemon.data.remote.ResultResp
 import com.igs279.pokemon.domain.entities.PokeEntity
 
 class Repository(private val remoteDataSource: RemoteDataSource,
-                 private val localDataSource: LocalDataSource
-) {
+                 private val localDataSource: LocalDataSource) {
 
     suspend fun getSearchPokeData(searchText: String): PokeEntity? {
         return when(val response = remoteDataSource.getSearchPokeData(searchText)){
             is ResultResp.Success -> {
                 savePokeEntity(response.data)
             }
-            is ResultResp.Error.ServerError -> null
-            is ResultResp.Error.NetworkError -> null
+            is ResultResp.Error.ServerError -> PokeEntity("","","","",
+                    "","")
+            is ResultResp.Error.NetworkError -> PokeEntity("","","","",
+                    "","")
         }
     }
 
@@ -49,12 +50,12 @@ class Repository(private val remoteDataSource: RemoteDataSource,
 
     private fun savePokeEntity(searchPokeResponse: SearchPokeResponse): PokeEntity{
         return PokeEntity(
-            id = searchPokeResponse.id.toString(),
-            name = searchPokeResponse.name,
-            height = searchPokeResponse.height.toString(),
-            weight = searchPokeResponse.weight.toString(),
-            experience = searchPokeResponse.baseExperience.toString(),
-            imageUrl = searchPokeResponse.sprites.frontDefault
+                id = searchPokeResponse.id.toString(),
+                name = searchPokeResponse.name,
+                height = searchPokeResponse.height.toString(),
+                weight = searchPokeResponse.weight.toString(),
+                experience = searchPokeResponse.baseExperience.toString(),
+                imageUrl = searchPokeResponse.sprites.frontDefault
         )
     }
 }

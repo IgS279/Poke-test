@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pokemon</string>
+    <string name="app_name">Poke-test</string>
 
     <string name="title_search">Search</string>
     <string name="title_random">Random</string>

@@ -52,8 +52,8 @@ class RandomViewModel(private val repository: Repository) : ViewModel() {
             _name.postValue(resp?.name)
             _height.postValue(resp?.height.toString())
             _weight.postValue(resp?.weight.toString())
-            _experience.postValue(resp?.baseExperience.toString())
-            _imageUrl.postValue(resp?.sprites?.frontDefault.toString())
+           // _experience.postValue(resp?.baseExperience.toString())
+           // _imageUrl.postValue(resp?.sprites?.frontDefault.toString())
         }
     }
 }

@@ -2,10 +2,7 @@ package com.igs279.pokemon
 
 import android.app.Application
 import android.util.Log
-import com.igs279.pokemon.di.databaseModule
-import com.igs279.pokemon.di.randomViewModelModule
-import com.igs279.pokemon.di.repoModule
-import com.igs279.pokemon.di.searchViewModelModule
+import com.igs279.pokemon.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -24,6 +21,7 @@ class App : Application() {
                 listOf(
                     searchViewModelModule,
                     randomViewModelModule,
+                    favViewModelModule,
                     repoModule,
                     databaseModule)
             )

@@ -16,5 +16,7 @@
 
     <string name="button_random">Случайный поиск</string>
 
+    <string name="fav_item_name">Name</string>
+    <string name="fav_item_id">Id</string>
 
 </resources>

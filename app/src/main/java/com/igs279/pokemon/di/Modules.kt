@@ -4,8 +4,10 @@ package com.igs279.pokemon.di
 import android.app.Application
 import com.igs279.pokemon.data.Repository
 import com.igs279.pokemon.data.local.AppDatabase
+import com.igs279.pokemon.data.local.LocalDataSource
 import com.igs279.pokemon.data.local.PokeDAO
 import com.igs279.pokemon.data.remote.RemoteDataSource
+import com.igs279.pokemon.ui.fav.FavViewModel
 import com.igs279.pokemon.ui.random.RandomViewModel
 import com.igs279.pokemon.ui.search.SearchViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -19,19 +21,31 @@ val randomViewModelModule = module {
     viewModel { RandomViewModel(get()) }
 }
 
+val favViewModelModule = module {
+    viewModel { FavViewModel(get()) }
+}
+
+
 val repoModule = module {
 
     fun provideRemoteDataSource(): RemoteDataSource {
         return RemoteDataSource.instance
     }
 
-    fun provideRepository(remoteDataSource: RemoteDataSource)
+    fun provideLocalDataSource(pokeDAO: PokeDAO): LocalDataSource {
+        return LocalDataSource(pokeDAO)
+    }
+
+    fun provideRepository(remoteDataSource: RemoteDataSource,
+                          localDataSource: LocalDataSource
+    )
             : Repository {
-        return Repository(remoteDataSource)
+        return Repository(remoteDataSource, localDataSource)
     }
 
     single { provideRemoteDataSource() }
-    single { provideRepository(get()) }
+    single { provideLocalDataSource(get()) }
+    single { provideRepository(get(), get()) }
 
 }
 
@@ -40,11 +54,11 @@ val databaseModule = module {
         return AppDatabase.getDatabase(application)
     }
 
-    fun provideMyWeatherDao(db: AppDatabase): PokeDAO {
+    fun providePokeDao(db: AppDatabase): PokeDAO {
         return db.myPokeDAO()
     }
 
     single { provideAppDatabase(get()) }
-    single { provideMyWeatherDao(get()) }
+    single { providePokeDao(get()) }
 }
 

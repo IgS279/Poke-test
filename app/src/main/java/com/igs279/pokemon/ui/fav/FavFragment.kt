@@ -5,27 +5,60 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.igs279.pokemon.R
+import com.igs279.pokemon.data.models.PokeEntityDb
+import com.igs279.pokemon.databinding.FragmentFavBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FavFragment : Fragment() {
+class FavFragment : Fragment(), OnCustomClickListener {
 
-    private lateinit var favViewModel: FavViewModel
+    private val favViewModel: FavViewModel by viewModel()
+    private lateinit var binding: FragmentFavBinding
+    private lateinit var favAdapter: FavAdapter
+    private lateinit var favRecycler: RecyclerView
+
+    //private lateinit var pokes: List<PokeEntity>
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        favViewModel =
-                ViewModelProvider(this).get(FavViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_fav, container, false)
-        val textView: TextView = root.findViewById(R.id.text_notifications)
-        favViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
+        binding = DataBindingUtil.inflate(inflater,
+            R.layout.fragment_fav, container, false)
+        binding.favViewModel = favViewModel
+        binding.lifecycleOwner = this
+
+        favRecycler = binding.favRecycler
+        favRecycler.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.VERTICAL, false
+        )
+
+        favViewModel.getPokeEntity().observe(viewLifecycleOwner) { pokes ->
+            val adapter = FavAdapter(pokes, this)
+            favRecycler.adapter = adapter
+        }
+
+        favRecycler.addItemDecoration(
+            DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        )
+        return binding.root
+    }
+
+    override fun onItemClick(view: View, item: PokeEntityDb) {
+        CoroutineScope(Dispatchers.IO).launch {
+            favViewModel.deletePoke(item)
+        }
     }
 }

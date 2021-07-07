@@ -6,6 +6,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
+
         <variable
             name="randomViewModel"
             type="com.igs279.pokemon.ui.random.RandomViewModel" />
@@ -24,6 +26,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:text="@string/button_random"
+            android:onClick="@{(view) -> randomViewModel.onClickRandomButton()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -49,8 +52,10 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="end|bottom"
-                android:src="@drawable/starbl"
-                android:visibility="invisible"/>
+                android:onClick="@{(view) -> randomViewModel.onClickFavStars()}"
+                android:src="@{randomViewModel.favSelect ? @drawable/star : @drawable/starbl}"
+                android:visibility="@{randomViewModel.favVisible ? View.VISIBLE : View.INVISIBLE}"
+                />
 
         </FrameLayout>
 

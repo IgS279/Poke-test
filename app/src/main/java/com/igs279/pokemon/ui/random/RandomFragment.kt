@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.igs279.pokemon.R
@@ -27,9 +28,9 @@ class RandomFragment : Fragment() {
         binding.randomViewModel = randomViewModel
         binding.lifecycleOwner = this
 
-        binding.buttonRandom.setOnClickListener{
+        /*binding.buttonRandom.setOnClickListener{
             randomViewModel.searchPokeById()
-        }
+        }*/
         return binding.root
     }
 
@@ -37,31 +38,26 @@ class RandomFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.i(TAG, "RandomFragment onViewCreated +")
 
-        randomViewModel.id.observe(viewLifecycleOwner){ id ->
-            Log.i(TAG, "randomFragment.id  id= $id")
-            binding.randomTextViewId.text = id
+        randomViewModel.pokeEntity.observe(viewLifecycleOwner){ pokeEntity ->
+            binding.randomTextViewId.text = pokeEntity.id
+            binding.randomTextViewName.text = pokeEntity.name
+            binding.randomTextViewHeight.text = pokeEntity.height
+            binding.randomTextViewWeight.text = pokeEntity.weight
+            binding.randomTextViewBaseExperience.text = pokeEntity.experience
+
             binding.randomTextId.visibility = View.VISIBLE
-        }
-
-        randomViewModel.myName.observe(viewLifecycleOwner){ name ->
-            binding.randomTextViewName.text = name
             binding.randomTextName.visibility = View.VISIBLE
-        }
-
-        randomViewModel.height.observe(viewLifecycleOwner){ height ->
-            binding.randomTextViewHeight.text = height
             binding.randomTextHeight.visibility = View.VISIBLE
-        }
-
-        randomViewModel.weight.observe(viewLifecycleOwner){ weight ->
-            binding.randomTextViewWeight.text = weight
             binding.randomTextWeight.visibility = View.VISIBLE
-        }
-
-        randomViewModel.experience.observe(viewLifecycleOwner){ experience ->
-            binding.randomTextViewBaseExperience.text = experience
             binding.randomTextBaseExperience.visibility = View.VISIBLE
             binding.imageViewRandomFavPoke.visibility = View.VISIBLE
         }
+
+        randomViewModel.hasNetwork.observe(viewLifecycleOwner){ hasNetwork ->
+            if (!hasNetwork){
+                Toast.makeText(activity, "No internet connection", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 }

@@ -18,7 +18,7 @@ val searchViewModelModule = module {
 }
 
 val randomViewModelModule = module {
-    viewModel { RandomViewModel(get()) }
+    viewModel { RandomViewModel(get(), get()) }
 }
 
 val favViewModelModule = module {

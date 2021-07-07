@@ -1,68 +1,131 @@
 package com.igs279.pokemon.ui.random
 
+import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.util.Log
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.*
+import com.igs279.pokemon.App
 import com.igs279.pokemon.TAG
 import com.igs279.pokemon.data.Repository
+import com.igs279.pokemon.data.models.PokeEntityDb
+import com.igs279.pokemon.domain.entities.PokeEntity
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class RandomViewModel(private val repository: Repository) : ViewModel() {
+class RandomViewModel(application: Application,
+                      private val repository: Repository)
+    : AndroidViewModel(application) {
 
-    private var _id = MutableLiveData<String>()
-    val id: LiveData<String>
-        get() = _id
-
-    private var _name = MutableLiveData<String>()
-    val myName: LiveData<String>
-        get() = _name
-
-    private var _height = MutableLiveData<String>()
-    val height: LiveData<String>
-        get() = _height
-
-    private var _weight = MutableLiveData<String>()
-    val weight: LiveData<String>
-        get() = _weight
-
-    private var _experience = MutableLiveData<String>()
-    val experience: LiveData<String>
-        get() = _experience
+    private var _hasNetwork = MutableLiveData<Boolean>()
+    val hasNetwork: LiveData<Boolean>
+        get() = _hasNetwork
 
     private var _imageUrl = MutableLiveData<String>()
     val imageUrl: LiveData<String>
         get() = _imageUrl
 
-    fun searchPokeById(){
+    private var _pokeEntity = MutableLiveData<PokeEntity>()
+    val pokeEntity: LiveData<PokeEntity>
+        get() = _pokeEntity
+
+
+    val favVisible = ObservableBoolean(false)
+    val favSelect = ObservableBoolean(false)
+
+    private fun searchPokeById(){
         fun getRandomId(): String{
-            return (0..898).random().toString()   // https://pokeapi.co/api/v2/pokemon-species/?limit=0   count = 898
+            return (1..898).random().toString()   // https://pokeapi.co/api/v2/pokemon-species/?limit=0   count = 898
         }
-        CoroutineScope(Dispatchers.Main).launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val random = getRandomId()
             Log.i(TAG, "randomText = $random}")
             Log.i(TAG, "searchPokeById = ${repository.getSearchPokeData(random)}")
             val resp = repository.getSearchPokeData(random)
-            _id.postValue(resp?.id.toString())
-            _name.postValue(resp?.name)
-            _height.postValue(resp?.height.toString())
-            _weight.postValue(resp?.weight.toString())
-           // _experience.postValue(resp?.baseExperience.toString())
-           // _imageUrl.postValue(resp?.sprites?.frontDefault.toString())
+            _imageUrl.postValue(resp?.imageUrl)
+            _pokeEntity.postValue(resp!!)
+
         }
     }
+
+    fun onClickRandomButton(){
+        if (checkNetwork()) {
+            searchPokeById()
+            favVisible.set(false)
+            _hasNetwork.value = true
+            Log.i(TAG, "favVisible.set(false) +")
+        } else _hasNetwork.value = false
+    }
+
+    fun onClickFavStars(){
+        if (!favSelect.get()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                updateOrInsertPoke()
+                Log.i(TAG, "imageViewFavPoke upd/ins check = ${favSelect.get()}")
+            }
+        } else{
+            viewModelScope.launch(Dispatchers.IO) {
+                deletePoke()
+                Log.i(TAG, "imageViewFavPoke del check = ${favSelect.get()}")
+            }
+        }
+    }
+
+    private suspend fun isFavorite(name: String?): Int {
+        return repository.isFavorite(name)
+    }
+
+    private suspend fun updateOrInsertPoke() {
+        val pokeEntityDb = pokeEntity.value?.let {
+            PokeEntityDb(
+                    idKey = it.id.toIntOrNull() ?: 0,
+                    pokeEntity = it
+            )
+        }
+        if (pokeEntityDb?.idKey != 0) {
+            if (isFavorite(pokeEntityDb?.pokeEntity?.name) == 1) {
+                pokeEntityDb?.let { repository.updatePoke(it) }
+                Log.i(TAG, "pokeEntityDb = $pokeEntityDb")
+            } else {
+                pokeEntityDb?.let { repository.insertPoke(it) }
+                Log.i(TAG, "pokeEntityDb = $pokeEntityDb")
+            }
+            favSelect.set(true)
+        }
+    }
+
+    private suspend fun deletePoke() {
+        if (isFavorite(pokeEntity.value?.name) == 1) {
+            if (pokeEntity.value?.id?.equals("") == false) {
+                pokeEntity.value?.id?.toInt()?.let {repository.deleteById(it)
+                }
+            }
+            favSelect.set(false)
+            Log.i(TAG, "deletePoke")
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun checkNetwork(): Boolean {
+        val cm = getApplication<App>()
+                .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo: NetworkInfo? = cm.activeNetworkInfo
+        return networkInfo?.isConnectedOrConnecting == true
+    }
+
 }
 
 @BindingAdapter("app:imageUrl")
 fun loadImage(view: ImageView, imageUrl: String?) {
     Log.i(TAG, "loadImage +    imageUrl = $imageUrl")
-    Picasso.get()
-            .load(imageUrl)
-            //.placeholder(R.drawable.ic_launcher_foreground)
-            .into(view)
+    if (imageUrl?.trim()?.length != 0) {
+        Picasso.get()
+                .load(imageUrl)
+                .into(view)
+    }
 }

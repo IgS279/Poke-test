@@ -49,7 +49,7 @@ class RandomViewModel(application: Application,
             val resp = repository.getSearchPokeData(random)
             _imageUrl.postValue(resp?.imageUrl)
             _pokeEntity.postValue(resp!!)
-
+            favSelect.set(false)
         }
     }
 

@@ -13,6 +13,10 @@
             type="com.igs279.pokemon.ui.random.RandomViewModel" />
     </data>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -197,5 +201,7 @@
             app:layout_constraintTop_toBottomOf="@+id/random_text_view_weight"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </layout>

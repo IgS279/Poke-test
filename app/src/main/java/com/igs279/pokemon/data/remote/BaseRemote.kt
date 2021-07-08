@@ -1,7 +1,5 @@
 package com.igs279.pokemon.data.remote
 
-import android.util.Log
-import com.igs279.pokemon.TAG
 import okhttp3.ResponseBody
 import retrofit2.Response
 
@@ -15,14 +13,11 @@ open class BaseRemote {
         val errorBody = response.errorBody()
         if(response.isSuccessful) {
             if (body != null) {
-                Log.i(TAG, "ResultResp.Success +")
                 return ResultResp.Success(response.body()!!)
             } else{
-                Log.i(TAG, "ResultResp.Error.ServerError $code")
                 return ResultResp.Error.ServerError(code, errorBody)
             }
         } else {
-            Log.i(TAG, "Result.Error.NetworkError.....")
             return ResultResp.Error.NetworkError(errorMessage)
         }
     }

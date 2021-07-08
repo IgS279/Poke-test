@@ -1,6 +1,5 @@
 package com.igs279.pokemon.di
 
-
 import android.app.Application
 import com.igs279.pokemon.data.Repository
 import com.igs279.pokemon.data.local.AppDatabase
@@ -37,8 +36,7 @@ val repoModule = module {
     }
 
     fun provideRepository(remoteDataSource: RemoteDataSource,
-                          localDataSource: LocalDataSource
-    )
+                          localDataSource: LocalDataSource)
             : Repository {
         return Repository(remoteDataSource, localDataSource)
     }
@@ -61,4 +59,3 @@ val databaseModule = module {
     single { provideAppDatabase(get()) }
     single { providePokeDao(get()) }
 }
-

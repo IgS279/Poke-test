@@ -1,7 +1,6 @@
 package com.igs279.pokemon.ui.random
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.igs279.pokemon.R
-import com.igs279.pokemon.TAG
 import com.igs279.pokemon.databinding.FragmentRandomBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -27,16 +25,11 @@ class RandomFragment : Fragment() {
                 R.layout.fragment_random, container, false)
         binding.randomViewModel = randomViewModel
         binding.lifecycleOwner = this
-
-        /*binding.buttonRandom.setOnClickListener{
-            randomViewModel.searchPokeById()
-        }*/
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i(TAG, "RandomFragment onViewCreated +")
 
         randomViewModel.pokeEntity.observe(viewLifecycleOwner){ pokeEntity ->
             binding.randomTextViewId.text = pokeEntity.id

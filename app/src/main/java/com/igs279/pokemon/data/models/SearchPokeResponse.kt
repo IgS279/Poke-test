@@ -2,7 +2,6 @@ package com.igs279.pokemon.data.models
 
 import com.google.gson.annotations.SerializedName
 
-
 data class SearchPokeResponse (
     val id: Long,
     val name: String,

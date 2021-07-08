@@ -1,13 +1,11 @@
 package com.igs279.pokemon.ui.fav
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.igs279.pokemon.TAG
 import com.igs279.pokemon.data.models.PokeEntityDb
 import com.igs279.pokemon.databinding.FavRecyclerItemBinding
 import com.squareup.picasso.Picasso
@@ -38,7 +36,6 @@ class FavAdapter(private val pokeDbs: List<PokeEntityDb>,
                         .load(pokeDbs[position].pokeEntity.imageUrl)
                         .into(holder.binding.favItemImagePoke)
                 holder.binding.recyclerImageViewFavPoke.setOnClickListener {
-                    Log.i(TAG, "pokeEntityDb = $pokeDbs")
                     listener.onItemClick(it, pokeDbs[position])
                     pokeDbs.toMutableList().removeAt(position)
                     notifyItemRemoved(position)

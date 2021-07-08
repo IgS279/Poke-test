@@ -13,7 +13,7 @@ const val TAG: String = "Poke"
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.ThemePokemon) //  return app theme
+        setTheme(R.style.ThemePokemon)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 

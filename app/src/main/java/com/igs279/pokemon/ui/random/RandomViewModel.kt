@@ -4,13 +4,11 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import android.util.Log
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.*
 import com.igs279.pokemon.App
-import com.igs279.pokemon.TAG
 import com.igs279.pokemon.data.Repository
 import com.igs279.pokemon.data.models.PokeEntityDb
 import com.igs279.pokemon.domain.entities.PokeEntity
@@ -44,8 +42,6 @@ class RandomViewModel(application: Application,
         }
         viewModelScope.launch(Dispatchers.IO) {
             val random = getRandomId()
-            Log.i(TAG, "randomText = $random}")
-            Log.i(TAG, "searchPokeById = ${repository.getSearchPokeData(random)}")
             val resp = repository.getSearchPokeData(random)
             _imageUrl.postValue(resp?.imageUrl)
             _pokeEntity.postValue(resp!!)
@@ -58,7 +54,6 @@ class RandomViewModel(application: Application,
             searchPokeById()
             favVisible.set(false)
             _hasNetwork.value = true
-            Log.i(TAG, "favVisible.set(false) +")
         } else _hasNetwork.value = false
     }
 
@@ -66,12 +61,10 @@ class RandomViewModel(application: Application,
         if (!favSelect.get()) {
             viewModelScope.launch(Dispatchers.IO) {
                 updateOrInsertPoke()
-                Log.i(TAG, "imageViewFavPoke upd/ins check = ${favSelect.get()}")
             }
         } else{
             viewModelScope.launch(Dispatchers.IO) {
                 deletePoke()
-                Log.i(TAG, "imageViewFavPoke del check = ${favSelect.get()}")
             }
         }
     }
@@ -90,10 +83,8 @@ class RandomViewModel(application: Application,
         if (pokeEntityDb?.idKey != 0) {
             if (isFavorite(pokeEntityDb?.pokeEntity?.name) == 1) {
                 pokeEntityDb?.let { repository.updatePoke(it) }
-                Log.i(TAG, "pokeEntityDb = $pokeEntityDb")
             } else {
                 pokeEntityDb?.let { repository.insertPoke(it) }
-                Log.i(TAG, "pokeEntityDb = $pokeEntityDb")
             }
             favSelect.set(true)
         }
@@ -106,7 +97,6 @@ class RandomViewModel(application: Application,
                 }
             }
             favSelect.set(false)
-            Log.i(TAG, "deletePoke")
         }
     }
 
@@ -122,7 +112,6 @@ class RandomViewModel(application: Application,
 
 @BindingAdapter("app:imageUrl")
 fun loadImage(view: ImageView, imageUrl: String?) {
-    Log.i(TAG, "loadImage +    imageUrl = $imageUrl")
     if (imageUrl?.trim()?.length != 0) {
         Picasso.get()
                 .load(imageUrl)

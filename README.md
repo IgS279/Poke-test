@@ -1,4 +1,4 @@
-# Pokemon
+# Poke-test
 Poke-test - приложение для работы с API https://pokeapi.co/docs/v2
 
 Стек: Kotlin, MVVM, Retrofit, Coroutines, Koin, Navigation Architecture Component, Room
